@@ -1,0 +1,51 @@
+package trabalhoexcel;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Random;
+
+import org.apache.poi.hssf.usermodel.*;
+
+/**
+ *
+ * @author Zalla Ricardo
+ */
+public class TrabalhoExcel {
+    
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        // TODO code application logic here
+        /**
+         * APENAS MODIFICAR O CAMINHO NA STRING PATH PARA AUTOMATIZAR O PROGRAMA EM QUALQUER PC
+         */
+        String PATH = "C:/Users/Zalla Ricardo.ZallaRicardo/Downloads/PlanilhaOrcamentoPessoalEdu.xls";
+        
+        FileInputStream is = new FileInputStream(PATH);
+        HSSFWorkbook excel = new HSSFWorkbook(is);
+        HSSFSheet budget = excel.getSheetAt(0);
+        HSSFCell celula;
+
+        /**
+         * preenchendo todas as células do fluxo de dados com uma senóide
+         */
+        for(int i=4; i<16;i++){
+            for(int j=5;j<109;j++){
+                celula = budget.getRow(j).getCell(i);
+                if( !budget.getRow(j).getCell(3).isPartOfArrayFormulaGroup() && 
+                    !budget.getRow(j).getCell(3).getStringCellValue().equals("")) 
+                        celula.setCellValue(1000*Math.abs(Math.sin(2*i*j)));
+            }
+        }
+        
+        is.close();
+        
+        /**
+         * Escrevendo o fluxo de dados no arquivo em PATH
+         */
+        FileOutputStream out = new FileOutputStream(PATH);
+        excel.write(out);
+        out.close();
+    }
+    
+}
